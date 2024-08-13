@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
               no: -1
           },
           {
-              question: `You are eligible for FMLA leave for yourself. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
+              question: `You may be eligible for FMLA leave for yourself. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
               <ul>
                   <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/leave-request-form.pdf?rev=ade70f40eb39487ca78da42ee69e6f82&hash=4F4956AA7E967F0989066D15AEAB8318" target="_blank">Leave Request Form</a></li>
                   <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/fmla-med-cert-employee.pdf?rev=06526780c3254a95aa1bffa80c00e122&hash=35DB39B498C882BDF7C052DEB7DF60CF" target="_blank">Medical Certification for Employee's Serious Health Condition</a></li>
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
               no: -1
           },
           {
-              question: `You are eligible for FMLA leave to care for a family member. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
+              question: `You may be eligible for FMLA leave to care for a family member. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
               <ul>
                   <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/leave-request-form.pdf?rev=ade70f40eb39487ca78da42ee69e6f82&hash=4F4956AA7E967F0989066D15AEAB8318" target="_blank">Leave Request Form</a></li>
                   <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/fmla-med-cert-family-member.pdf?rev=cc9c1585eece442eb338d5c3b0f0b98c&hash=90F4BD3D843ED08CE6CDE480A25386F5" target="_blank">Medical Certification for Family Member's Serious Health Condition</a></li>
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
               no: -1
           },
           {
-              question: `You are eligible for FMLA leave to care for a newborn. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
+              question: `You may be eligible for FMLA leave to care for a newborn. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
               <ul>
                   <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/leave-request-form.pdf?rev=ade70f40eb39487ca78da42ee69e6f82&hash=4F4956AA7E967F0989066D15AEAB8318" target="_blank">Leave Request Form</a></li>
                   <li>Proof of Live Birth Document (as soon as possible after birth - provided by the hospital)</li>
@@ -131,14 +131,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showNonEligibilityMessage() {
-      decisionTree.innerHTML = `
-          <div class="decision-node">
-              <p>You are unable to qualify for FMLA at this time. Please visit 
+    decisionTree.innerHTML = `
+        <div class="decision-node">
+            <p>You are unable to qualify for FMLA at this time. Please visit 
               <a href="https://kingcounty.gov/en/legacy/audience/employees/benefits/leaves" target="_blank">
               this page</a> for additional information on potential next steps.</p>
-          </div>
-      `;
-  }
+            <p>In addition, while you may not be eligible for FMLA/KCFML, you still may be able to qualify for Washington State PFML. 
+            Visit the <a href="https://paidleave.wa.gov/get-ready-to-apply/" target="_blank">Washington State PFML website</a> for additional information.</p>
+        </div>
+    `;
+    }
 
   window.startTrack = startTrack;
 });
