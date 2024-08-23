@@ -41,11 +41,21 @@ h1 {
   font-size: 24px;
   margin-top: 50px;
   margin-bottom: 20px;
+  /* color: #FDB71A; */
 }
 
-.track-content {
-  display: none;
-  margin-top: 20px;
+.decision-node, #track-selection {
+  margin: 20px 0;
+  text-align: left;
+  font-family: 'Humanist 777', Arial, sans-serif;
+}
+
+.decision-node p {
+  margin-bottom: 15px;
+}
+
+.decision-node div {
+  margin-bottom: 15px;
 }
 
 button {
@@ -55,12 +65,19 @@ button {
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
-  margin: 10px 0;
+  margin: 5px 0;
   width: 100%;
+  box-sizing: border-box;
 }
 
 button:hover {
   background-color: #1d276b;
+}
+
+li, p {
+  text-align: left;
+  margin-left: 20px;
+  font-family: 'Humanist 777', Arial, sans-serif;
 }
 
 @media (max-width: 600px) {
