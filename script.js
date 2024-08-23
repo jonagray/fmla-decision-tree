@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const decisionTree = document.getElementById('decision-tree');
     const trackSelection = document.getElementById('track-selection');
-  
+
     const tracks = {
         self: [
             {
@@ -77,28 +77,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         ]
     };
-  
+
     let currentTrack = null;
     let currentNode = 0;
-  
+
     function startTrack(track) {
         currentTrack = tracks[track];
         currentNode = 0;
         trackSelection.style.display = 'none';
         renderNode(currentNode);
     }
-  
+
     function renderNode(nodeIndex) {
         const node = currentTrack[nodeIndex];
         decisionTree.innerHTML = '';
-  
+
         const nodeElement = document.createElement('div');
         nodeElement.className = 'decision-node';
-  
+
         const questionElement = document.createElement('div');
         questionElement.innerHTML = node.question;
         nodeElement.appendChild(questionElement);
-  
+
         if (node.yes !== null) {
             const yesButton = document.createElement('button');
             yesButton.innerText = 'Yes';
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             nodeElement.appendChild(yesButton);
         }
-  
+
         if (node.no !== null) {
             const noButton = document.createElement('button');
             noButton.innerText = 'No';
@@ -126,22 +126,21 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             nodeElement.appendChild(noButton);
         }
-  
+
         decisionTree.appendChild(nodeElement);
     }
-  
+
     function showNonEligibilityMessage() {
-      decisionTree.innerHTML = `
-          <div class="decision-node">
-              <p>You are unable to qualify for FMLA at this time. Please visit 
-                <a href="https://kingcounty.gov/en/legacy/audience/employees/benefits/leaves" target="_blank">
-                this page</a> for additional information on potential next steps.</p>
-              <p>In addition, while you may not be eligible for FMLA/KCFML, you still may be able to qualify for Washington State PFML. 
-              Visit the <a href="https://paidleave.wa.gov/get-ready-to-apply/" target="_blank">Washington State PFML website</a> for additional information.</p>
-          </div>
-      `;
+        decisionTree.innerHTML = `
+            <div class="decision-node">
+                <p>You are unable to qualify for FMLA at this time. Please visit 
+                  <a href="https://kingcounty.gov/en/legacy/audience/employees/benefits/leaves" target="_blank">
+                  this page</a> for additional information on potential next steps.</p>
+                <p>In addition, while you may not be eligible for FMLA/KCFML, you still may be able to qualify for Washington State PFML. 
+                Visit the <a href="https://paidleave.wa.gov/get-ready-to-apply/" target="_blank">Washington State PFML website</a> for additional information.</p>
+            </div>
+        `;
     }
-  
+
     window.startTrack = startTrack;
-  });
-  
+});
