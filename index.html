@@ -30,8 +30,15 @@
         function translateIframe() {
             var language = document.getElementById('language_selector').value;
             var iframeSrc = document.getElementById('content_iframe').src;
+
+            // Construct the URL for Google Translate
             var url = "https://translate.google.com/translate?hl=" + language + "&sl=en&tl=" + language + "&u=" + encodeURIComponent(iframeSrc);
+
+            // Update the iframe source to the translated page
             document.getElementById('content_iframe').src = url;
+
+            // Update the dropdown to reflect the selected language
+            document.getElementById('language_selector').value = language;
         }
     </script>
 </body>
