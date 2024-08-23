@@ -42,7 +42,13 @@ body {
   top: 10px;
   right: 10px;
   padding: 5px;
-  font-size: 14px;
+  font-size: 12px;
+	cursor: pointer;
+	border-radius: 5px;
+	background-color: #ededed;
+	list-style: none;
+  text-align-last:center;
+  margin-right: 10px;
 }
 
 h1 {
