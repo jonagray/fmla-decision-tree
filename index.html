@@ -12,7 +12,7 @@
         <h1>FMLA Leave Decision Tree</h1>
         
         <!-- Language Selection Dropdown -->
-        <select id="language_selector" onchange="translatePage()">
+        <select id="language_selector" onchange="translateIframe()" data-no-translate>
             <option value="en">English</option>
             <option value="es">Spanish</option>
             <option value="fr">French</option>
@@ -21,38 +21,18 @@
             <!-- Add more languages as needed -->
         </select>
 
-        <div id="track-selection">
-            <button onclick="startTrack('self')">FMLA for Yourself</button>
-            <button onclick="startTrack('family')">FMLA for a Family Member</button>
-            <button onclick="startTrack('newborn')">FMLA for a Newborn</button>
-        </div>
-        <div id="decision-tree"></div>
+        <!-- Iframe for Translated Content -->
+        <iframe id="content_iframe" src="content.html" frameborder="0" style="width: 100%; height: 600px;"></iframe>
     </div>
-
-    <!-- Google Translate Script -->
-    <div id="google_translate_element" style="display:none;"></div>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({pageLanguage: 'en'}, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <!-- Translation Function -->
     <script type="text/javascript">
-        function translatePage() {
+        function translateIframe() {
             var language = document.getElementById('language_selector').value;
-            var googleTranslateElementInit = document.getElementById('google_translate_element');
-
-            if (language !== 'en') {
-                var url = "https://translate.google.com/translate?hl=" + language + "&sl=en&tl=" + language + "&u=" + window.location.href;
-                window.location.href = url;
-            } else {
-                window.location.href = window.location.href.split('?')[0];
-            }
+            var iframeSrc = document.getElementById('content_iframe').src;
+            var url = "https://translate.google.com/translate?hl=" + language + "&sl=en&tl=" + language + "&u=" + encodeURIComponent(iframeSrc);
+            document.getElementById('content_iframe').src = url;
         }
     </script>
-
-    <script src="script.js"></script>
 </body>
 </html>
