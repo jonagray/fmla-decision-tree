@@ -9,10 +9,10 @@
 <body>
     <div class="container">
         <img src="assets/kc-metro-logo.png" alt="KC Metro Logo" class="kc-logo">
-        <h1>FMLA Leave Decision Tree</h1>
+        <h1 id="title">FMLA Leave Decision Tree</h1>
         
         <!-- Language Selection Dropdown -->
-        <select id="language_selector" onchange="translateIframe()" data-no-translate>
+        <select id="language_selector" onchange="translatePage()" data-no-translate>
             <option value="en">English</option>
             <option value="es">Spanish</option>
             <option value="fr">French</option>
@@ -21,24 +21,112 @@
             <!-- Add more languages as needed -->
         </select>
 
-        <!-- Iframe for Translated Content -->
-        <iframe id="content_iframe" src="content.html" frameborder="0" style="width: 100%; height: 600px;"></iframe>
+        <!-- Track Selection -->
+        <div id="track-selection">
+            <button onclick="showTrack('self')" id="selfBtn">FMLA for Yourself</button>
+            <button onclick="showTrack('family')" id="familyBtn">FMLA for a Family Member</button>
+            <button onclick="showTrack('newborn')" id="newbornBtn">FMLA for a Newborn</button>
+        </div>
+
+        <!-- Decision Tree Content -->
+        <div id="selfTrack" class="track-content" style="display:none;">
+            <h2>FMLA for Yourself</h2>
+            <p>Have you been employed at King County for at least 12 months in the past 7 years?</p>
+            <button onclick="showNext('selfStep2')">Yes</button>
+            <button onclick="showNotEligible()">No</button>
+
+            <div id="selfStep2" style="display:none;">
+                <p>Have you worked at least 1,250 hours in the past 12 months?</p>
+                <button onclick="showEligible('selfEligible')">Yes</button>
+                <button onclick="showNotEligible()">No</button>
+            </div>
+
+            <div id="selfEligible" style="display:none;">
+                <p>You may be eligible for FMLA leave for yourself. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the required documents.</p>
+            </div>
+        </div>
+
+        <div id="familyTrack" class="track-content" style="display:none;">
+            <h2>FMLA for a Family Member</h2>
+            <p>Does your family member have a serious health condition?</p>
+            <button onclick="showNext('familyStep2')">Yes</button>
+            <button onclick="showNotEligible()">No</button>
+
+            <div id="familyStep2" style="display:none;">
+                <p>Have you been employed at King County for at least 12 months in the past 7 years?</p>
+                <button onclick="showNext('familyStep3')">Yes</button>
+                <button onclick="showNotEligible()">No</button>
+            </div>
+
+            <div id="familyStep3" style="display:none;">
+                <p>Have you worked at least 1,250 hours in the past 12 months?</p>
+                <button onclick="showEligible('familyEligible')">Yes</button>
+                <button onclick="showNotEligible()">No</button>
+            </div>
+
+            <div id="familyEligible" style="display:none;">
+                <p>You may be eligible for FMLA leave to care for a family member. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the required documents.</p>
+            </div>
+        </div>
+
+        <div id="newbornTrack" class="track-content" style="display:none;">
+            <h2>FMLA for a Newborn</h2>
+            <p>Are you the biological, adoptive, or foster parent of the newborn?</p>
+            <button onclick="showNext('newbornStep2')">Yes</button>
+            <button onclick="showNotEligible()">No</button>
+
+            <div id="newbornStep2" style="display:none;">
+                <p>Have you been employed at King County for at least 12 months in the past 7 years?</p>
+                <button onclick="showNext('newbornStep3')">Yes</button>
+                <button onclick="showNotEligible()">No</button>
+            </div>
+
+            <div id="newbornStep3" style="display:none;">
+                <p>Have you worked at least 1,250 hours in the past 12 months?</p>
+                <button onclick="showEligible('newbornEligible')">Yes</button>
+                <button onclick="showNotEligible()">No</button>
+            </div>
+
+            <div id="newbornEligible" style="display:none;">
+                <p>You may be eligible for FMLA leave to care for a newborn. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the required documents.</p>
+            </div>
+        </div>
+
+        <!-- Not Eligible Message -->
+        <div id="notEligible" style="display:none;">
+            <p>You are not eligible for FMLA at this time. Please contact HR for further assistance.</p>
+        </div>
     </div>
 
-    <!-- Translation Function -->
-    <script type="text/javascript">
-        function translateIframe() {
+    <!-- Translation and Display Logic -->
+    <script>
+        function translatePage() {
             var language = document.getElementById('language_selector').value;
-            var iframeSrc = document.getElementById('content_iframe').src;
+            // Translate the entire page using Google Translate
+            window.location.href = `https://translate.google.com/translate?hl=${language}&sl=en&tl=${language}&u=` + encodeURIComponent(window.location.href);
+        }
 
-            // Construct the URL for Google Translate
-            var url = "https://translate.google.com/translate?hl=" + language + "&sl=en&tl=" + language + "&u=" + encodeURIComponent(iframeSrc);
+        function showTrack(track) {
+            // Hide all track content
+            var tracks = document.getElementsByClassName('track-content');
+            for (var i = 0; i < tracks.length; i++) {
+                tracks[i].style.display = 'none';
+            }
 
-            // Update the iframe source to the translated page
-            document.getElementById('content_iframe').src = url;
+            // Show the selected track content
+            document.getElementById(track + 'Track').style.display = 'block';
+        }
 
-            // Update the dropdown to reflect the selected language
-            document.getElementById('language_selector').value = language;
+        function showNext(stepId) {
+            document.getElementById(stepId).style.display = 'block';
+        }
+
+        function showEligible(eligibleId) {
+            document.getElementById(eligibleId).style.display = 'block';
+        }
+
+        function showNotEligible() {
+            document.getElementById('notEligible').style.display = 'block';
         }
     </script>
 </body>
