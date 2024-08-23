@@ -9,14 +9,45 @@
 <body>
     <div class="container">
         <img src="assets/kc-metro-logo.png" alt="KC Metro Logo" class="kc-logo">
-        <h1>FMLA Leave Decision Tree</h1>
+        <h1 id="title">FMLA Leave Decision Tree</h1>
+        
+        <!-- Language Selection Dropdown -->
+        <select id="language_selector" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="vi">Vietnamese</option>
+            <option value="so">Somali</option>
+            <option value="ru">Russian</option>
+            <option value="zh_CN">Chinese (Simplified)</option>
+            <option value="ko">Korean</option>
+            <option value="am">Amharic</option>
+            <option value="ar">Arabic</option>
+            <option value="uk">Ukrainian</option>
+            <!-- Add more languages as needed -->
+        </select>
+
+        <!-- Track Selection -->
         <div id="track-selection">
-            <button onclick="startTrack('self')">FMLA for Yourself</button>
-            <button onclick="startTrack('family')">FMLA for a Family Member</button>
-            <button onclick="startTrack('newborn')">FMLA for a Newborn</button>
+            <button onclick="startTrack('self')" id="selfBtn">FMLA for Yourself</button>
+            <button onclick="startTrack('family')" id="familyBtn">FMLA for a Family Member</button>
+            <button onclick="startTrack('newborn')" id="newbornBtn">FMLA for a Newborn</button>
         </div>
+
+        <!-- Decision Tree Content -->
         <div id="decision-tree"></div>
+
+        <!-- Not Eligible Message -->
+        <div id="notEligible" style="display:none;">
+            <p id="notEligibleMessage">You are not eligible for FMLA at this time. Please contact HR for further assistance.</p>
+        </div>
+
+        <!-- Start Over Button Container -->
+        <div id="start-over-container">
+            <button id="start-over" onclick="location.reload()">Start Over</button>
+        </div>
     </div>
+
+    <script src="translations.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

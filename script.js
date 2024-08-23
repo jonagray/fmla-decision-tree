@@ -1,146 +1,128 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const decisionTree = document.getElementById('decision-tree');
-  const trackSelection = document.getElementById('track-selection');
+let currentTrack = null;
+let currentStepIndex = 0;
 
-  const tracks = {
-      self: [
-          {
-              question: "Have you been employed at King County for at least 12 months in the past 7 years?",
-              yes: 1,
-              no: -1
-          },
-          {
-              question: "Have you worked at least 1,250 (1,040 for bus operators) hours in the past 12 months?",
-              yes: 2,
-              no: -1
-          },
-          {
-              question: `You may be eligible for FMLA leave for yourself. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
-              <ul>
-                  <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/leave-request-form.pdf?rev=ade70f40eb39487ca78da42ee69e6f82&hash=4F4956AA7E967F0989066D15AEAB8318" target="_blank">Leave Request Form</a></li>
-                  <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/fmla-med-cert-employee.pdf?rev=06526780c3254a95aa1bffa80c00e122&hash=35DB39B498C882BDF7C052DEB7DF60CF" target="_blank">Medical Certification for Employee's Serious Health Condition</a></li>
-              </ul>`,
-              yes: null,
-              no: null
-          }
-      ],
-      family: [
-          {
-              question: "Does your family member have a serious health condition? (Link to list of example qualifying health conditions)",
-              yes: 1,
-              no: -1
-          },
-          {
-              question: "Have you been employed at King County for at least 12 months in the past 7 years?",
-              yes: 2,
-              no: -1
-          },
-          {
-              question: "Have you worked at least 1,250 (1,040 for bus operators) hours in the past 12 months?",
-              yes: 3,
-              no: -1
-          },
-          {
-              question: `You may be eligible for FMLA leave to care for a family member. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
-              <ul>
-                  <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/leave-request-form.pdf?rev=ade70f40eb39487ca78da42ee69e6f82&hash=4F4956AA7E967F0989066D15AEAB8318" target="_blank">Leave Request Form</a></li>
-                  <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/fmla-med-cert-family-member.pdf?rev=cc9c1585eece442eb338d5c3b0f0b98c&hash=90F4BD3D843ED08CE6CDE480A25386F5" target="_blank">Medical Certification for Family Member's Serious Health Condition</a></li>
-              </ul>`,
-              yes: null,
-              no: null
-          }
-      ],
-      newborn: [
-          {
-              question: "Are you the biological parent, adoptive parent, or foster parent of the newborn?",
-              yes: 1,
-              no: -1
-          },
-          {
-              question: "Have you been employed at King County for at least 12 months in the past 7 years?",
-              yes: 2,
-              no: -1
-          },
-          {
-              question: "Have you worked at least 1,250 (1,040 for bus operators) hours in the past 12 months?",
-              yes: 3,
-              no: -1
-          },
-          {
-              question: `You may be eligible for FMLA leave to care for a newborn. Contact <a href="mailto:TransitFMLA@kingcounty.gov">TransitFMLA@kingcounty.gov</a> to apply. Be sure to submit the following completed documents: 
-              <ul>
-                  <li><a href="https://cdn.kingcounty.gov/-/media/king-county/depts/dhr/documents/benefits/leaves/leave-request-form.pdf?rev=ade70f40eb39487ca78da42ee69e6f82&hash=4F4956AA7E967F0989066D15AEAB8318" target="_blank">Leave Request Form</a></li>
-                  <li>Proof of Live Birth Document (as soon as possible after birth - provided by the hospital)</li>
-              </ul>`,
-              yes: null,
-              no: null
-          }
-      ]
-  };
+const tracks = {
+    self: [
+        {
+            question: "selfQuestion1",
+            yes: "selfQuestion2",
+            no: "notEligibleMessage"
+        },
+        {
+            question: "selfQuestion2",
+            yes: "selfEligibleMessage",
+            no: "notEligibleMessage"
+        }
+    ],
+    family: [
+        {
+            question: "familyQuestion1",
+            yes: "familyQuestion2",
+            no: "notEligibleMessage"
+        },
+        {
+            question: "familyQuestion2",
+            yes: "familyQuestion3",
+            no: "notEligibleMessage"
+        },
+        {
+            question: "familyQuestion3",
+            yes: "familyEligibleMessage",
+            no: "notEligibleMessage"
+        }
+    ],
+    newborn: [
+        {
+            question: "newbornQuestion1",
+            yes: "newbornQuestion2",
+            no: "notEligibleMessage"
+        },
+        {
+            question: "newbornQuestion2",
+            yes: "newbornQuestion3",
+            no: "newbornAdditionalQuestion"
+        },
+        {
+            question: "newbornQuestion3",
+            yes: "newbornEligibleMessage",
+            no: "newbornAdditionalQuestion"
+        },
+        {
+            question: "newbornAdditionalQuestion",
+            yes: "newbornPPLMessage",
+            no: "newbornNoPPLMessage"
+        }
+    ]
+};
 
-  let currentTrack = null;
-  let currentNode = 0;
+function startTrack(trackName) {
+    // Hide the track selection section
+    document.getElementById("track-selection").style.display = "none";
+    
+    currentTrack = tracks[trackName];
+    currentStepIndex = 0;
+    showNextStep();
+}
 
-  function startTrack(track) {
-      currentTrack = tracks[track];
-      currentNode = 0;
-      trackSelection.style.display = 'none';
-      renderNode(currentNode);
-  }
+function showNextStep() {
+    const decisionTreeDiv = document.getElementById("decision-tree");
+    decisionTreeDiv.innerHTML = "";  // Clear previous content
 
-  function renderNode(nodeIndex) {
-      const node = currentTrack[nodeIndex];
-      decisionTree.innerHTML = '';
+    const currentStep = currentTrack[currentStepIndex];
+    const questionText = translations[document.getElementById("language_selector").value][currentStep.question];
+    
+    const questionElement = document.createElement("p");
+    questionElement.innerText = questionText;
+    decisionTreeDiv.appendChild(questionElement);
 
-      const nodeElement = document.createElement('div');
-      nodeElement.className = 'decision-node';
+    const yesButton = document.createElement("button");
+    yesButton.innerText = "Yes";
+    yesButton.onclick = function() { handleAnswer("yes") };
+    decisionTreeDiv.appendChild(yesButton);
 
-      const questionElement = document.createElement('div');
-      questionElement.innerHTML = node.question;
-      nodeElement.appendChild(questionElement);
+    const noButton = document.createElement("button");
+    noButton.innerText = "No";
+    noButton.onclick = function() { handleAnswer("no") };
+    decisionTreeDiv.appendChild(noButton);
+}
 
-      if (node.yes !== null) {
-          const yesButton = document.createElement('button');
-          yesButton.innerText = 'Yes';
-          yesButton.onclick = () => {
-              if (currentTrack[node.yes] === undefined) {
-                  showNonEligibilityMessage();
-              } else {
-                  currentNode = node.yes;
-                  renderNode(currentNode);
-              }
-          };
-          nodeElement.appendChild(yesButton);
-      }
+function handleAnswer(answer) {
+    const currentStep = currentTrack[currentStepIndex];
+    const nextStepKey = currentStep[answer];
 
-      if (node.no !== null) {
-          const noButton = document.createElement('button');
-          noButton.innerText = 'No';
-          noButton.onclick = () => {
-              if (currentTrack[node.no] === undefined) {
-                  showNonEligibilityMessage();
-              } else {
-                  currentNode = node.no;
-                  renderNode(currentNode);
-              }
-          };
-          nodeElement.appendChild(noButton);
-      }
-
-      decisionTree.appendChild(nodeElement);
-  }
-
-  function showNonEligibilityMessage() {
-    decisionTree.innerHTML = `
-        <div class="decision-node">
-            <p>You are unable to qualify for FMLA at this time. Please visit 
-              <a href="https://kingcounty.gov/en/legacy/audience/employees/benefits/leaves" target="_blank">
-              this page</a> for additional information on potential next steps.</p>
-            <p>In addition, while you may not be eligible for FMLA/KCFML, you still may be able to qualify for Washington State PFML. 
-            Visit the <a href="https://paidleave.wa.gov/get-ready-to-apply/" target="_blank">Washington State PFML website</a> for additional information.</p>
-        </div>
-    `;
+    if (nextStepKey.includes("Message")) {
+        showResult(nextStepKey);
+    } else {
+        currentStepIndex = currentTrack.findIndex(step => step.question === nextStepKey);
+        showNextStep();
     }
+}
 
-  window.startTrack = startTrack;
-});
+function showResult(resultKey) {
+    const decisionTreeDiv = document.getElementById("decision-tree");
+    decisionTreeDiv.innerHTML = "";  // Clear previous content
+
+    const resultText = translations[document.getElementById("language_selector").value][resultKey];
+
+    // Set the result text as HTML content if it's a message containing HTML
+    decisionTreeDiv.innerHTML = resultText;
+}
+
+function changeLanguage() {
+    const selectedLanguage = document.getElementById("language_selector").value;
+    
+    // Show disclaimer if the selected language is not English
+    if (selectedLanguage !== 'en') {
+        alert(`DISCLAIMER
+King County Metro is providing the “Google Translate” option to assist you in reading the website in languages other than English. Google Translate is a third-party service that performs statistical machine translation. Since the translations are generated by machines, translation accuracy will vary across languages and are not guaranteed to be exact. The official text is the English version of the website. No warranty of any kind is made as to the accuracy, reliability, or correctness of any of these translations. Some content (such as images, videos, etc.) may not be accurately translated. Translations may include incorrect or inappropriate language.
+If any questions arise related to the accuracy of the information contained in these translations, please refer to the English version of the website. If you have any questions about Google Translate, please visit the Google Translate website. If you have any issues with Google Translate, please visit https://translate.google.com/support/.
+
+Updated 8.13.2024`);
+    }
+    
+    // Update the text content based on the selected language
+    document.getElementById("title").innerText = translations[selectedLanguage].title;
+    document.getElementById("selfBtn").innerText = translations[selectedLanguage].selfBtn;
+    document.getElementById("familyBtn").innerText = translations[selectedLanguage].familyBtn;
+    document.getElementById("newbornBtn").innerText = translations[selectedLanguage].newbornBtn;
+}
